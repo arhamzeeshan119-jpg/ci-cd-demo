@@ -1,0 +1,22 @@
+{
+  "name": "ci-cd-demo",
+  "version": "1.0.0",
+  "description": "Demo project to learn CI/CD pipeline failures",
+  "main": "build.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "node build.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^30.5.2"
+  },
+  "dependencies": {
+    "left-pad": "99.9.9"
+  }
+}
