@@ -8,4 +8,4 @@ const html = fs
 fs.rmSync("dist", { recursive: true, force: true });
 fs.mkdirSync("dist");
 fs.writeFileSync("dist/index.html", html);
-console.log("Build complete");
+console.log("Build complete";

@@ -15,5 +15,8 @@
   "license": "ISC",
   "devDependencies": {
     "jest": "^30.5.2"
+  },
+   "dependencies": {
+    "left-pad": "99.9.9"
   }
 }
