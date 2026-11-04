@@ -71,3 +71,6 @@ Switch back to main (`git checkout main`) or restore the original file, commit a
 3. Dependency conflict: npm error code ETARGET - No matching version found for left-pad@99.9.9
 4. Flaky test:          random failures on re-run
 5. Infrastructure:      curl: (6) Could not resolve host
+
+## Jenkins + Docker version
+See JENKINS.md for the Jenkins and Docker pipeline (Dockerfile, Jenkinsfile, jenkins/).

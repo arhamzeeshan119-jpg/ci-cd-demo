@@ -1,0 +1,15 @@
+services:
+  jenkins:
+    build: .
+    container_name: jenkins
+    user: root                      # simple for learning; not for production
+    ports:
+      - "8080:8080"                 # Jenkins web page
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock   # lets Jenkins use your Docker
+    restart: unless-stopped
+
+volumes:
+  jenkins_home:
