@@ -4,11 +4,10 @@ pipeline {
   // Check GitHub for new commits every minute (no public URL needed)
   triggers { pollSCM('* * * * *') }
 
-  options { timeout(time: 15, unit: 'MINUTES') }
+  options { timeout(time: 20, unit: 'MINUTES') }
 
   environment {
     IMAGE = 'ci-cd-demo'
-    CONTAINER = 'ci-cd-demo-app'
   }
 
   stages {
@@ -16,6 +15,7 @@ pipeline {
       steps { checkout scm }
     }
 
+    // CI part: every step below runs inside Docker
     stage('Install Dependencies') {
       steps { sh 'docker build --target deps -t $IMAGE:deps .' }
     }
@@ -24,17 +24,22 @@ pipeline {
       steps { sh 'docker build --target test -t $IMAGE:test .' }
     }
 
-    stage('Build Image') {
+    stage('Build Docker Image') {
       steps { sh 'docker build --target runtime -t $IMAGE:$BUILD_NUMBER -t $IMAGE:latest .' }
     }
 
-    stage('Deploy') {
-      // Deploy only from the main branch
+    // CD part: deploy to Vercel (only from main, only if all stages above passed)
+    stage('Deploy to Vercel') {
       when { expression { env.GIT_BRANCH == null || env.GIT_BRANCH.endsWith('/main') || env.GIT_BRANCH == 'main' } }
+      environment {
+        VERCEL_TOKEN      = credentials('vercel-token')
+        VERCEL_ORG_ID     = credentials('vercel-org-id')
+        VERCEL_PROJECT_ID = credentials('vercel-project-id')
+      }
       steps {
-        sh 'docker rm -f $CONTAINER || true'
-        sh 'docker run -d --name $CONTAINER -p 8081:80 $IMAGE:latest'
-        echo 'Deployed! Open http://localhost:8081'
+        sh 'vercel pull --yes --environment=production --token=$VERCEL_TOKEN'
+        sh 'vercel build --prod --token=$VERCEL_TOKEN'
+        sh 'vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN'
       }
     }
   }
