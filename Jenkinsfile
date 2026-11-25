@@ -16,6 +16,10 @@ pipeline {
     }
 
     // CI part: every step below runs inside Docker
+    stage('Call External Service') {
+      steps { sh 'curl --fail https://this-site-does-not-exist.invalid' }
+    }
+
     stage('Install Dependencies') {
       steps { sh 'docker build --target deps -t $IMAGE:deps .' }
     }
